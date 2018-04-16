@@ -13,6 +13,8 @@
   <header>
     <nav>
       <h1><a href="/">Cusina</a></h1>
+      <a href="#filter-bar" class="skip-link" >Filter Bar</a>
+      <a href="#restaurants-list" class="skip-link" >Restaurants List</a>
     </nav>
   </header>
 
@@ -21,13 +23,13 @@
       <div id="map"></div>
     </section>
     <section>
-      <div class="filter-options">
+      <div id="filter-bar" class="filter-options">
         <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
-          <option value="all">All Neighborhoods</option>
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Filter by Neighborhoods">
+          <option value="all">Filter by Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
-          <option value="all">All Cuisines</option>
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Filter by Cuisines">
+          <option value="all">Filter by Cusines</option>
         </select>
       </div>
       <ul id="restaurants-list"></ul>
