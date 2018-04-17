@@ -10,20 +10,20 @@
 </head>
 
 <body>
-  <header>
-    <nav>
+  <header role="banner">
+    <nav role="navigation">
       <h1><a href="/">Cusina</a></h1>
       <a href="#filter-bar" class="skip-link" >Filter Bar</a>
       <a href="#restaurants-list" class="skip-link" >Restaurants List</a>
     </nav>
   </header>
 
-  <main id="maincontent">
+  <main id="maincontent" role="main">
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" role="application"></div>
     </section>
     <section>
-      <div id="filter-bar" class="filter-options">
+      <div id="filter-bar" class="filter-options" aria-label="filter results" role="form">
         <h2>Filter Results</h2>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Filter by Neighborhoods">
           <option value="all">Filter by Neighborhoods</option>
@@ -41,7 +41,7 @@
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDroiPn7hcZGAWpAVZqEjARSZgEUyU-vHo&libraries=places&callback=initMap"></script>
 
 
-  <footer id="footer">
+  <footer id="footer" role="contentinfo">
     Copyright (c) 2018 <a href="/"><strong>Cusina</strong></a> All Rights Reserved.
   </footer>
 
