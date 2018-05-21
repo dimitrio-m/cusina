@@ -6,9 +6,11 @@ const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 const babel = require('gulp-babel');
 
-gulp.task('default', ['images', 'styles', 'scripts'], () => {
+gulp.task('default', ['build'], () => {
   gulp.watch('src/sass/**/*.scss', ['styles']);
   gulp.watch('src/js/**/*.js', ['scripts']);
+  gulp.watch('src/**/*.html', ['copy-html']);
+  gulp.watch('dist/**/*.html').on('change', browserSync.reload);
   
   browserSync.init({
     server: "./dist"
@@ -16,7 +18,7 @@ gulp.task('default', ['images', 'styles', 'scripts'], () => {
   browserSync.stream();
 });
 
-gulp.task('build', ['images', 'styles', 'scripts']);
+gulp.task('build', ['images', 'styles', 'scripts', 'copy-manifest', 'copy-sw', 'copy-html', 'copy-data']);
 
 gulp.task('styles', () => {
   gulp.src('src/sass/**/*.scss')
@@ -45,4 +47,24 @@ gulp.task('scripts', () => {
     .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/js/'));
+});
+
+gulp.task('copy-html', () => {
+  gulp.src('src/**/*.html')
+    .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('copy-manifest', () => {
+  gulp.src('src/manifest.json')
+    .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('copy-sw', () => {
+  gulp.src('src/sw.js')
+  .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('copy-data', () => {
+  gulp.src('src/data/*')
+  .pipe(gulp.dest('./dist/data/'));
 });
