@@ -3,15 +3,20 @@ const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync');
 const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
 
-gulp.task('default', () => {
+gulp.task('default', ['images', 'styles', 'scripts'], () => {
   gulp.watch('src/sass/**/*.scss', ['styles']);
+  gulp.watch('src/js/**/*.js', ['scripts']);
   
   browserSync.init({
     server: "./dist"
   });
   browserSync.stream();
 });
+
+gulp.task('build', ['images', 'styles', 'scripts']);
 
 gulp.task('styles', () => {
   gulp.src('src/sass/**/*.scss')
@@ -27,6 +32,17 @@ gulp.task('styles', () => {
 });
 
 gulp.task('images', () => {
-  pipe.src('src/img/*')
-    .pipe(gulp.dest('dist/img/'))
+  gulp.src('src/img/*')
+    .pipe(gulp.dest('./dist/img/'));
+});
+
+gulp.task('scripts', () => {
+  gulp.src('src/js/**/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['env']
+    }))
+    .pipe(uglify())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./dist/js/'));
 });
