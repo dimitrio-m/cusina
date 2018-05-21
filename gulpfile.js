@@ -3,8 +3,9 @@ const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync');
 const sourcemaps = require('gulp-sourcemaps');
-const uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify-es').default;
 const babel = require('gulp-babel');
+const imagemin = require('gulp-imagemin');
 
 gulp.task('default', ['build'], () => {
   gulp.watch('src/sass/**/*.scss', ['styles']);
@@ -35,15 +36,15 @@ gulp.task('styles', () => {
 
 gulp.task('images', () => {
   gulp.src('src/img/*')
+    .pipe(imagemin({
+      progressive: true,
+    }))
     .pipe(gulp.dest('./dist/img/'));
 });
 
 gulp.task('scripts', () => {
   gulp.src('src/js/**/*.js')
     .pipe(sourcemaps.init())
-    .pipe(babel({
-      presets: ['env']
-    }))
     .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/js/'));
