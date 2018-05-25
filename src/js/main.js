@@ -1,15 +1,24 @@
 self.markers = [];
 self.restaurants = [];
 
-let observer = new IntersectionObserver(changes => {
-  for (const change of changes) {
-    if (change.intersectionRatio >= 0.9) {
-      fillRestaurantsHTML();
+let observer = new IntersectionObserver(
+  changes => {
+    for (const change of changes) {
+      if (change.intersectionRatio >= 0.9) {
+        DBHelper.fetchRestaurants((error, data) => {
+          if (error) {
+            console.error(error);
+          } else {
+            fillRestaurantsHTML(data)
+          }
+        });
+      }
     }
+  },
+  {
+    threshold: [0.9]
   }
-}, {
-  threshold: [0.9],
-});
+);
 
 observer.observe(document.getElementById('restaurants-list'));
 /**
@@ -164,7 +173,7 @@ createRestaurantHTML = restaurant => {
   image.alt = `${restaurant.name}'s atmosphere`;
   li.append(image);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
 

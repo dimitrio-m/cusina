@@ -9,7 +9,20 @@ const resources = {
     '/css/styles.css',
     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700'
   ],
-  routes: ['/', '/restaurant.html']
+  routes: ['/', '/restaurant.html'],
+  imgs: [
+    '/img/1.webp',
+    '/img/2.webp',
+    '/img/3.webp',
+    '/img/4.webp',
+    '/img/5.webp',
+    '/img/6.webp',
+    '/img/7.webp',
+    '/img/8.webp',
+    '/img/9.webp',
+    '/img/10.webp',
+    '/food.svg'
+  ],
 };
 
 const staticCacheName = 'cusina-v6';
@@ -20,7 +33,8 @@ self.addEventListener('install', event => {
       return cache.addAll([
         ...resources.routes,
         ...resources.styles,
-        ...resources.scripts
+        ...resources.scripts,
+        ...resources.imgs
       ]);
     })
   );
@@ -51,21 +65,12 @@ self.addEventListener('fetch', event => {
       event.respondWith(caches.match('/restaurant.html'));
       return;
     }
-    if (requestUrl.pathname.startsWith('/img/')) {
-      event.respondWith(servePhoto(event.request));
-      return;
-    }
   }
-
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
-    })
-  );
+  event.respondWith(serve(event.request));
 });
 
-function servePhoto(request) {
-  const storageUrl = request.url.replace(/-\d+px\.webp$/, '');
+function serve(request) {
+  const storageUrl = request.url;
   return caches.open(staticCacheName).then(cache => {
     return cache.match(storageUrl).then(response => {
       if (response) {
