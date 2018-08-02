@@ -20,6 +20,8 @@ You will be provided code for a Node development server and a README for getting
 
 The core functionality of the application will not change for this stage. Only the source of the data will change. You will use the fetch() API to make requests to the server to populate the content of your Restaurant Reviews app.
 
+
+
 ### What do I do from here?
 
 1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 

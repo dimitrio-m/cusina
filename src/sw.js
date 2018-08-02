@@ -21,7 +21,9 @@ const resources = {
     '/img/8.webp',
     '/img/9.webp',
     '/img/10.webp',
-    '/food.svg'
+    '/food.svg',
+    '/img/bg1.webp',
+    '/img/bg1-mobile.webp'
   ],
 };
 
@@ -54,7 +56,7 @@ self.addEventListener('activate', function(event) {
             return caches.delete(cacheName);
           })
       );
-    })
+    }).catch(err => console.error(err))
   );
 });
 
@@ -64,9 +66,13 @@ self.addEventListener('fetch', event => {
     if (requestUrl.pathname.includes('/restaurant.html')) {
       event.respondWith(caches.match('/restaurant.html'));
       return;
-    }
+    } 
+  }
+  else if (requestUrl.origin.includes('maps')) {
+    return;
   }
   event.respondWith(serve(event.request));
+  
 });
 
 function serve(request) {
@@ -79,7 +85,7 @@ function serve(request) {
       return fetch(request).then(networkResponse => {
         cache.put(storageUrl, networkResponse.clone());
         return networkResponse;
-      });
-    });
-  });
+      }).catch(err => console.error(err));
+    }).catch(err => console.error(err));
+  }).catch(err => console.error(err));
 }

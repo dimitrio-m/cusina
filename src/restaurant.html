@@ -63,6 +63,16 @@
     <!-- Beginning reviews -->
     <section id="reviews-container" aria-label="reviews" role="region">
       <ul id="reviews-list"></ul>
+      <form action="" method="post">
+        <label for="name">Username</label>
+        <input type="text" name="name" id="name">
+        <label for="rating">Rating</label>
+        <input type="number" name="rating" id="rating" min="1" max="5">
+        <label for="review">Write a review</label>
+        <textarea name="review" id="review" rows="5"></textarea>
+        <input type="hidden" name="restaurantID" id="restaurantID">
+        <button type="submit">Send</button>
+      </form>
     </section>
     <!-- End reviews -->
   </main>

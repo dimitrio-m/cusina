@@ -4,9 +4,8 @@ const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify-es').default;
-const babel = require('gulp-babel');
-const imagemin = require('gulp-imagemin');
 const webp = require('gulp-webp');
+const gzip = require('gulp-gzip');
 
 gulp.task('default', ['build'], () => {
   gulp.watch('src/sass/**/*.scss', ['styles']);
@@ -28,7 +27,8 @@ gulp.task('build', [
   'copy-files',
   'copy-sw',
   'copy-html',
-  'copy-data'
+  'copy-data',
+  'compress-js'
 ]);
 
 gulp.task('styles', () => {
@@ -63,6 +63,12 @@ gulp.task('scripts', () => {
     .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/js/'));
+});
+
+gulp.task('compress-js', function() {
+  gulp.src('./dist/js/*.js')
+  .pipe(gzip())
+  .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('copy-html', () => {

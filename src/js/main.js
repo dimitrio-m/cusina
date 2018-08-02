@@ -1,7 +1,7 @@
 self.markers = [];
 self.restaurants = [];
 
-let observer = new IntersectionObserver(
+let restaurantsObserver = new IntersectionObserver(
   changes => {
     for (const change of changes) {
       if (change.intersectionRatio >= 0.9) {
@@ -20,7 +20,7 @@ let observer = new IntersectionObserver(
   }
 );
 
-observer.observe(document.getElementById('restaurants-list'));
+restaurantsObserver.observe(document.getElementById('restaurants-list'));
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
