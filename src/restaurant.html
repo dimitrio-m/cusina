@@ -63,15 +63,21 @@
     <!-- Beginning reviews -->
     <section id="reviews-container" aria-label="reviews" role="region">
       <ul id="reviews-list"></ul>
-      <form action="" method="post">
-        <label for="name">Username</label>
-        <input type="text" name="name" id="name">
-        <label for="rating">Rating</label>
-        <input type="number" name="rating" id="rating" min="1" max="5">
-        <label for="review">Write a review</label>
-        <textarea name="review" id="review" rows="5"></textarea>
-        <input type="hidden" name="restaurantID" id="restaurantID">
-        <button type="submit">Send</button>
+      <form id="writeReview">
+        <div class="input-group username-group">
+          <label for="name">Username</label>
+          <input type="text" name="name" id="name" placeholder="Bill" required>
+        </div>
+        <div class="input-group rating-group">
+          <label for="rating">Rating</label>
+          <input type="number" name="rating" id="rating" min="1" max="5" placeholder="1-5" required>
+        </div>
+        <div class="input-group review-group">
+          <label for="review">Write a review</label>
+          <textarea name="review" id="review" rows="5" placeholder="Best restaurant ever!" required></textarea>
+        </div>
+        <input type="hidden" name="id" id="id" required>
+        <button>Send</button>
       </form>
     </section>
     <!-- End reviews -->

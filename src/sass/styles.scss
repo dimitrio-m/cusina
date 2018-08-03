@@ -332,6 +332,47 @@ nav h1 a {
   letter-spacing: -1px;
   padding-bottom: 1pt;
 }
+#reviews-container form {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+#reviews-container .input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+#reviews-container .username-group {
+  width: 50% !important;
+}
+#reviews-container .rating-group {
+  width: 50% !important;
+}
+#reviews-container input {
+  border: 1px solid black;
+  display: block;
+  margin: 0.5rem 1rem;
+  padding: 5px 5px;
+}
+#reviews-container label {
+  margin: 0.5rem 0.5rem 0.2rem 0.5rem;
+}
+#reviews-container textarea {
+  resize: none;
+  margin: 0.5rem 1rem;
+  border: 1px solid black;
+  padding: 5px 5px;
+
+}
+#reviews-container button {
+  margin: 0.5rem 1rem;
+  padding: 10px 20px;
+  border: black;
+  background-color: #252831;
+  color: white;
+  font-weight: bold;
+}
+
 #reviews-list {
   margin: 0;
   padding: 0 40px 0 0;
@@ -352,6 +393,12 @@ nav h1 a {
 #reviews-list li p {
   margin: 0 0 10px;
 }
+
+#reviews-list input {
+  background-color: red;
+  border-color: red;
+}
+
 #restaurant-hours td {
   color: #666;
 }
@@ -361,6 +408,12 @@ nav h1 a {
 @media screen and (max-width: 475px) {
   .filter-options select {
     width: 100%;
+  }
+  #reviews-container .username-group {
+    width: 100% !important;
+  }
+  #reviews-container .rating-group {
+    width: 100% !important;
   }
 }
 

@@ -69,6 +69,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
+
+  document.getElementById('id').value = restaurant.id;
 }
 
 /**
@@ -99,13 +101,6 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
-
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
-    return;
-  }
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
@@ -123,7 +118,7 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = review.date || new Date(review.createdAt).toLocaleString();
   li.appendChild(date);
 
   const rating = document.createElement('p');
@@ -162,4 +157,32 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+/**
+ * Get a parameter by name from page URL.
+ */
+document.getElementById('writeReview').onsubmit = (e) => {
+  if (e.preventDefault) e.preventDefault();
+  let data = {
+    restaurant_id: document.getElementById('id').value,
+    name: document.getElementById('name').value,
+    rating: document.getElementById('rating').value,
+    comments: document.getElementById('review').value
+  }  
+  let url = 'http://localhost:1337/reviews/';
+  const ul = document.getElementById('reviews-list');
+
+  fetch(url, {
+    method: 'POST', // or 'PUT'
+    body: JSON.stringify(data), // data can be `string` or {object}!
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  }).then(res => res.json())
+  .catch(error => console.error('Error:', error))
+  .then(response => {
+    ul.appendChild(createReviewHTML(response));
+    console.log(response);
+  });
 }
