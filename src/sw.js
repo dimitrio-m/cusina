@@ -20,14 +20,14 @@ const resources = {
     '/img/7.webp',
     '/img/8.webp',
     '/img/9.webp',
-    '/img/10.webp',
+    '/img/undefined.webp',
     '/food.svg',
     '/img/bg1.webp',
     '/img/bg1-mobile.webp'
   ],
 };
 
-const staticCacheName = 'cusina-v6';
+const staticCacheName = 'cusina-v7';
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -38,7 +38,7 @@ self.addEventListener('install', event => {
         ...resources.scripts,
         ...resources.imgs
       ]);
-    })
+    }).catch(error => console.error(error))
   );
 });
 
@@ -62,6 +62,11 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', event => {
   const requestUrl = new URL(event.request.url);
+  if (event.request.method === 'POST') {
+    // Store here or In Fetch
+    event.respondWith(fetch(event.request).catch(error => console.error(error)));
+    return;
+  }
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname.includes('/restaurant.html')) {
       event.respondWith(caches.match('/restaurant.html'));

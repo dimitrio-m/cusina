@@ -51,7 +51,7 @@ class DBHelper {
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
     idbKeyval
-      .get(id)
+      .get(Number(id))
       .then(restaurant => {
         if (restaurant) {
           callback(null, restaurant);

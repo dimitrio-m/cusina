@@ -1,6 +1,10 @@
 self.markers = [];
 self.restaurants = [];
 
+window.onload = () => {
+  
+}
+
 let restaurantsObserver = new IntersectionObserver(
   changes => {
     for (const change of changes) {

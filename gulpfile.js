@@ -28,13 +28,14 @@ gulp.task('build', [
   'copy-sw',
   'copy-html',
   'copy-data',
-  'compress-js'
+  'compress-js',
+  'compress-css',
+  'compress-html'
 ]);
 
 gulp.task('styles', () => {
   gulp
     .src('src/sass/**/*.scss')
-    .pipe(sourcemaps.init())
     .pipe(
       sass({
         outputStyle: 'compressed'
@@ -45,7 +46,6 @@ gulp.task('styles', () => {
         browsers: ['last 2 versions']
       })
     )
-    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/css/'));
 });
 
@@ -59,9 +59,7 @@ gulp.task('images', () => {
 gulp.task('scripts', () => {
   gulp
     .src('src/js/**/*.js')
-    .pipe(sourcemaps.init())
     .pipe(uglify())
-    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/js/'));
 });
 
@@ -69,6 +67,18 @@ gulp.task('compress-js', function() {
   gulp.src('./dist/js/*.js')
   .pipe(gzip())
   .pipe(gulp.dest('./dist/js/'));
+});
+
+gulp.task('compress-css', function() {
+  gulp.src('./dist/css/*.css')
+  .pipe(gzip())
+  .pipe(gulp.dest('./dist/css/'));
+});
+
+gulp.task('compress-html', function() {
+  gulp.src('./dist/*.html')
+  .pipe(gzip())
+  .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('copy-html', () => {
