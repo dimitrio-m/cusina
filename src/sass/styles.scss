@@ -403,6 +403,27 @@ nav h1 a {
   color: #666;
 }
 
+#favorite, #restaurant-name {
+  display: inline-block;
+}
+
+#favorite {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+#favorite svg {
+  width: 25px;
+  height: 25px;
+}
+
+#favorite polygon {
+  fill: #ccc;
+}
+
+.checked polygon {
+  fill: orange !important;
+}
 /* ======================== Media Queries ======================== */
 
 @media screen and (max-width: 475px) {

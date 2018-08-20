@@ -1,10 +1,6 @@
 self.markers = [];
 self.restaurants = [];
 
-window.onload = () => {
-  
-}
-
 let restaurantsObserver = new IntersectionObserver(
   changes => {
     for (const change of changes) {
@@ -13,7 +9,7 @@ let restaurantsObserver = new IntersectionObserver(
           if (error) {
             console.error(error);
           } else {
-            fillRestaurantsHTML(data)
+            fillRestaurantsHTML(data);
           }
         });
       }
@@ -25,6 +21,7 @@ let restaurantsObserver = new IntersectionObserver(
 );
 
 restaurantsObserver.observe(document.getElementById('restaurants-list'));
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */

@@ -62,7 +62,7 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', event => {
   const requestUrl = new URL(event.request.url);
-  if (event.request.method === 'POST') {
+  if (event.request.method !== 'GET') {
     // Store here or In Fetch
     event.respondWith(fetch(event.request).catch(error => console.error(error)));
     return;

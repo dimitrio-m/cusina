@@ -56,6 +56,15 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
+  const fav = document.getElementById('favorite');
+  if (restaurant.is_favorite) {
+    fav.setAttribute('aria-checked', true);
+    fav.classList.add('checked');
+  } else {
+    fav.setAttribute('aria-checked', false);
+    fav.classList.remove('checked');
+  }
+
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
@@ -138,7 +147,8 @@ createReviewHTML = review => {
 
   const date = document.createElement('p');
   date.innerHTML =
-    (review.date? review.date.toLocaleString(): undefined) || new Date(review.createdAt).toLocaleString();
+    (review.date ? review.date.toLocaleString() : undefined) ||
+    new Date(review.createdAt).toLocaleString();
   li.appendChild(date);
 
   const rating = document.createElement('p');
@@ -193,7 +203,35 @@ document.getElementById('writeReview').onsubmit = e => {
 };
 
 /**
- * Send pending reviews.
+ * Fav Button handler.
+ */
+document.getElementById('favorite').onclick = e => {
+  idbKeyval
+    .get('pendingFav')
+    .then(pendingFav => {
+      console.log(pendingFav);
+      for (let fav of pendingFav) {
+        if (fav.id === self.restaurant.id) {
+          sendFav({ id: fav.id, new_state: !fav.new_state });
+          return;
+        }
+      }
+      sendFav({
+        id: self.restaurant.id,
+        new_state: !self.restaurant.is_favorite
+      });
+    })
+    .catch(error => {
+      console.error(error);
+      sendFav({
+        id: self.restaurant.id,
+        new_state: !self.restaurant.is_favorite
+      });
+    });
+};
+
+/**
+ * Send pending reviews and favs.
  */
 window.addEventListener('online', event => {
   console.log('Back online, sending pending reviews...');
@@ -201,9 +239,16 @@ window.addEventListener('online', event => {
     for (let review of pendingReviews) {
       sendReview(review, false);
     }
+    idbKeyval.del('pendingReviews');
+  });
+  idbKeyval.get('pendingFav').then(pendingFav => {
+    for (let fav of pendingFav) {
+      sendFav(fav, false);
+    }
+    idbKeyval.del('pendingFav');
   });
   const container = document.getElementById('reviews-container');
-  container.removeChild(container.lastChild);  
+  container.removeChild(container.lastChild);
 });
 
 /**
@@ -258,4 +303,65 @@ function sendReview(data, shouldAdd = true) {
         })
         .catch(error => console.error(error));
     });
+}
+
+/**
+ * Send fav to API.
+ */
+function sendFav(data, shouldUpdateState = true) {
+  let url = `http://localhost:1337/restaurants/${data.id}/?is_favorite=${
+    data.new_state ? 'true' : 'false'
+  }`;
+  fetch(url, {
+    method: 'PUT'
+  })
+    .then(res => {
+      return res.json();
+    })
+    .catch(error => {
+      console.log(error);
+      const container = document.getElementById('reviews-container');
+      if (!container.lastChild.textContent.includes('offline')) {
+        const message = document.createElement('p');
+        message.textContent =
+          'You are offline, the server will update when you go online.';
+        container.appendChild(message);
+      }
+      idbKeyval.get('pendingFav').then(response => {
+        if (!response) {
+          idbKeyval.set('pendingFav', [data]);
+        } else {
+          response.push(data);
+          idbKeyval.set('pendingFav', response);
+        }
+        if (shouldUpdateState) {
+          data.new_state ? FAVcheck() : FAVuncheck();
+        }
+      });
+    })
+    .then(response => {
+      idbKeyval
+        .get(data.id)
+        .then(restaurant => {
+          restaurant.is_favorite = data.new_state;
+          self.restaurant.is_favorite = data.new_state;
+          idbKeyval.set(restaurant.id, restaurant);
+          if (shouldUpdateState) {
+            data.new_state ? FAVcheck() : FAVuncheck();
+          }
+        })
+        .catch(error => console.error(error));
+    });
+}
+
+function FAVcheck() {
+  const fav = document.getElementById('favorite');
+  fav.setAttribute('aria-checked', true);
+  fav.classList.add('checked');
+}
+
+function FAVuncheck() {
+  const fav = document.getElementById('favorite');
+  fav.setAttribute('aria-checked', false);
+  fav.classList.remove('checked');
 }
